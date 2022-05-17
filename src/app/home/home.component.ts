@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import {
   reset,
   decrement,
   increment,
   customIncrement,
 } from '../Store/counter.action';
+import { getCounter } from '../Store/counter.Selectors';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +16,7 @@ import {
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  counterr: any;
+  counterrr$!: Observable<number>;
   constructor(private store: Store<{ counter: { counter: any } }>) {}
   formData: any;
   onIncrement() {
@@ -30,8 +32,10 @@ export class HomeComponent implements OnInit {
     this.store.dispatch(customIncrement(data));
   }
   ngOnInit(): void {
-    this.store.select('counter').subscribe((counter: any) => {
-      this.counterr = counter;
-    });
+    this.counterrr$ = this.store.select(getCounter);
+    // this.store.select(getCounter).subscribe((counterr: any) => {
+    //   // console.log(counterr);
+    //   this.counterrr$ = counterr;
+    // });
   }
 }
